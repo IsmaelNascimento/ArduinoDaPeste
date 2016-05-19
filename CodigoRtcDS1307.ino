@@ -11,6 +11,9 @@ RTC_DS1307 rtc;
 int rele = 8;
 int ledL = 13;
 
+//Nao apague a linha abaixo
+DateTime now = rtc.now();
+
 void setup ()
 {
   Serial.begin(9600);
@@ -35,8 +38,6 @@ void loop()
 
 void showInformations()
 {
-  DateTime now = rtc.now();
-  
   //Date
   Serial.print(now.day(), DEC);
   Serial.print('/');
@@ -52,12 +53,12 @@ void showInformations()
   Serial.print(':');
   Serial.print(now.second(), DEC);
   Serial.println();
+  
+  //delay(1000);
 }
 
 void horasDeTocar()
 {
-  DateTime now = rtc.now();
-  
   //==============================================================================================\\
   
   //Codigo abaixo, entre comentarios( /* */) para teste.
