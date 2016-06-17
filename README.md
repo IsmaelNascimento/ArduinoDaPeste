@@ -1,6 +1,9 @@
 # ArduinoDaPeste
 Códigos e documentações do projeto Arduino da Peste
 
+Facebook:
+https://www.facebook.com/arduinodapeste/?fref=ts
+
 Módulo RTC DS1307
 
 Módulo RTC DS1302
