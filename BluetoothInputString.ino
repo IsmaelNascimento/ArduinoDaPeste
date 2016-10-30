@@ -1,9 +1,7 @@
 int led = 13;
 String recebido[3];
 int n = 0;
-int iNum1;
-int iNum2;
-int iNum3;
+int iNum1, iNum2, iNum3;
 
 int tam;
   
@@ -18,15 +16,13 @@ void loop() {
     // Lê toda string recebida
     recebido[n] = leStringSerial();
     
-    String sNum1 = recebido[0];
-    String sNum2 = recebido[1];
-    String sNum3 = recebido[2];
-    
+    // Fazendo conversão de String para Int
     iNum1 = recebido[0].toInt();
     iNum2 = recebido[1].toInt();
     iNum3 = recebido[2].toInt();
     
-    if(sNum3 != ""){
+    // Verificação de impressão em serial monitor
+    if(recebido[2] != ""){
       Serial.println("Number1 + 1 = ");
      	Serial.println(iNum1 + 1);
       Serial.println("Number2 + 1 = ");
@@ -35,6 +31,7 @@ void loop() {
      	Serial.println(iNum3 + 1);
     }
     
+    // Lê mais um valor do bluetooth
     n++;
   }
 }
