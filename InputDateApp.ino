@@ -92,7 +92,11 @@ void loop() {
     }
     
     showInformations();
-    horariosDeTocar();
+    // horariosDeTocar();
+
+    if(horarios[20] != 0){
+      horariosDeTocar();  
+    }
 }
 
 void showInformations()
