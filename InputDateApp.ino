@@ -26,7 +26,7 @@ int rele = 8;
 int ledArduino = 13;
 int TempoToque = 0;
 // O primeiro é o tempo de toque da Sirene [0]
-int horarios[21]; 
+int horarios[3]; 
 int n = 0;
 
 void setup() {
@@ -61,46 +61,44 @@ void setup() {
 }
 
 void loop() {
-  
+  horariosDeTocar();
   // listen for BLE peripherals to connect:
   BLECentral central = blePeripheral.central();
-
   // if a central is connected to peripheral:
   if (central) {
+    /*
     Serial.print("Connected to central: ");
     // print the central's MAC address:
     Serial.println(central.address());
-
+    */
     // while the central is still connected to peripheral:
     while (central.connected()) {
-      // if the remote device wrote to the characteristic,
-      // use the value to control the LED:
+        showInformations();
+        // if the remote device wrote to the characteristic,
+        // use the value to control the LED:
         if (switchCharacteristic.written()) {
           horarios[n] = switchCharacteristic.value();
-
           // Lê mais um valor do bluetooth
           n++;
-          
-       
         }
-        
-      }
-      
-      // when the central disconnects, print it out:
+
+        for(int i = 0; i < 3; i++) {
+              // Serial.print("//========================\\");
+              Serial.print("Valor ");
+              Serial.print(i);
+              Serial.print(" = ");
+              Serial.println(horarios[i]); 
+              // Serial.print("//========================\\");
+            }
+     }
+    }
+    showInformations();
+    // when the central disconnects, print it out:
         Serial.print(F("Disconnected from central: "));
         Serial.println(central.address());
-    }
-    
-    showInformations();
-    // horariosDeTocar();
-
-    if(horarios[20] != 0){
-      horariosDeTocar();  
-    }
 }
 
-void showInformations()
-{
+void showInformations() {
   DateTime now = relogio.now();
   
   //Date
@@ -118,70 +116,35 @@ void showInformations()
   Serial.print(':');
   Serial.print(now.second(), DEC);
   Serial.println();
-  
-  //delay(1000);
 }
 
-void horariosDeTocar()
-{
-  DateTime now = relogio.now();
-  TempoToque = horarios[0] * 1000;
-  
-  if(now.hour() == horarios[1] && now.minute() == horarios[2]) //Primeiro toque.
-  {
+void horariosDeTocar() {
+  DateTime agora = relogio.now();
+  //Primeiro toque.
+  if(agora.hour() == horarios[1] && agora.minute() == horarios[2] && agora.second() == 0) {
     tocando();
-  }
-  else if(now.hour() == horarios[3] && now.minute() == horarios[4]) //Segundo toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[5] && now.minute() == horarios[6]) //Terceiro toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[7] && now.minute() == horarios[8]) //Quarto toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[9] && now.minute() == horarios[10]) //Quinto toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[11] && now.minute() == horarios[12]) //Sexto toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[13] && now.minute() == horarios[14]) //Setimo toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[15] && now.minute() == horarios[16]) //Oitavo toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[17] && now.minute() == horarios[18]) //Nono toque.
-  {
-    tocando();
-  }
-  else if(now.hour() == horarios[19] && now.minute() == horarios[20]) //Decimo toque.
-  {
-    tocando();
-  }
-  else
-  {
-    // piscaLed();
-    digitalWrite(rele, LOW); //Sirene desligada.
-    
-  }
+  }else{
+    piscaLed();
+   }
 }
 
 void tocando()
 {
-    Serial.print("Esta tocando\n");
-    Serial.print("O Leandro (e com acento agudo) lindo \n");
-    digitalWrite(ledArduino, HIGH);
+    TempoToque = horarios[0] * 1000;
+    //TempoToque = horarios[0];
+    
+    Serial.println("Esta tocando");
     digitalWrite(rele, HIGH);
-    //Toca 15 segundos (15 * 1000)
+    digitalWrite(ledArduino, HIGH);
     delay(TempoToque);    
     digitalWrite(rele, LOW);
+    digitalWrite(ledArduino, LOW);
+}
+
+void piscaLed()
+{
+  digitalWrite(ledArduino, HIGH);
+  delay(500);
+  digitalWrite(ledArduino, LOW);
+  delay(500);
 }
